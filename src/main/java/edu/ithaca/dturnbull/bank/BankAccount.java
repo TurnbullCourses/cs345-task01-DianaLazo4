@@ -43,8 +43,20 @@ public class BankAccount {
         if (email.indexOf('@') == -1){
             return false;
         }
-        else {
-            return true;
+
+        for (char c : email.toCharArray()){
+            if (!Character.isLetterOrDigit(c) && c != '@' && c != '.' && c != '-' && c != '_'){
+                return false;
+            }
         }
+        
+        String[] split = email.split("@");
+        
+        if (split.length != 2 || split[0].length() < 1 || split[1].length() < 3 || split[1].indexOf('.') == -1){
+            return false;
+        }
+
+        return true;
+
     }
 }

@@ -11,7 +11,12 @@ public class BankAccount {
     public BankAccount(String email, double startingBalance){
         if (isEmailValid(email)){
             this.email = email;
-            this.balance = startingBalance;
+            if (isAmountValid(startingBalance)==true){
+                this.balance = startingBalance;
+            }
+            else{
+                throw new IllegalArgumentException("Starting Balance Invalid Amount");
+            }
         }
         else {
             throw new IllegalArgumentException("Email address: " + email + " is invalid, cannot create account");
@@ -32,6 +37,9 @@ public class BankAccount {
     public void withdraw (double amount) throws InsufficientFundsException{
         //added this if statement, ammount withdrawn must be positive
         if (amount < 0){
+            throw new IllegalArgumentException("Not valid input");
+        }
+        if (false == isAmountValid(amount)){
             throw new IllegalArgumentException("Not valid input");
         }
         if (amount <= balance){
@@ -63,5 +71,32 @@ public class BankAccount {
 
         return true;
 
+    }
+
+    public static boolean isAmountValid(double amount){
+
+        if (amount < 0) {
+            return false;
+        }
+    
+        // Amount to string
+        String amountStr = String.valueOf(amount);
+    
+        // Find index of decimal point
+        int decimalIndex = amountStr.indexOf('.');
+    
+        // If there is a decimal, it loops and counts how many digits are after the decimal
+        if (decimalIndex != -1) {
+            int count = 0;
+            for (int i = decimalIndex + 1; i < amountStr.length(); i++) {
+                count++;
+            }
+    
+            if (count > 2) {
+                return false;
+            }
+        }
+    
+        return true;
     }
 }

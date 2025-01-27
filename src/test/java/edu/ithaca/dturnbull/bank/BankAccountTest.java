@@ -42,19 +42,22 @@ class BankAccountTest {
 
         // Insufficient Funds Class
         assertThrows(InsufficientFundsException.class, () -> bankAccount.withdraw(300));
-
+        
         //  Edge Cases Equivalence Class
         bankAccount.withdraw(0);
         assertEquals(100, bankAccount.getBalance(), 0.001);
 
-        bankAccount.withdraw(100);
+        bankAccount.withdraw(99.50);
+        assertEquals(0.5, bankAccount.getBalance(), 0.001);
+        bankAccount.withdraw(0.50);
         assertEquals(0, bankAccount.getBalance(), 0.001);
 
         // Illegal Input Class
         BankAccount bankAccount2 = new BankAccount("a2@b.com", 200);
         assertThrows(IllegalArgumentException.class, () -> bankAccount2.withdraw(-10));
 
-        
+        assertThrows(IllegalArgumentException.class, () -> bankAccount2.withdraw(10.897));
+
 
     }
 
@@ -118,6 +121,23 @@ class BankAccountTest {
 
     }
     @Test
+    void isAmountValidtest(){
+        //Whole Number Equivalence Class
+        assertTrue(BankAccount.isAmountValid( 10));
+        assertFalse(BankAccount.isAmountValid( 0));
+        assertFalse(BankAccount.isAmountValid( -10));
+
+
+        //Decimal Numbers Equivalence Classes
+        assertTrue(BankAccount.isAmountValid( 10.50));
+        assertFalse(BankAccount.isAmountValid( 10.567));
+        assertFalse(BankAccount.isAmountValid( 0.687));
+        assertTrue(BankAccount.isAmountValid( 0.68));
+        assertFalse(BankAccount.isAmountValid( -0.68));
+
+
+    }
+    @Test
     void constructorTest() {
         BankAccount bankAccount = new BankAccount("a@b.com", 200);
 
@@ -125,6 +145,25 @@ class BankAccountTest {
         assertEquals(200, bankAccount.getBalance(), 0.001);
         //check for exception thrown correctly
         assertThrows(IllegalArgumentException.class, ()-> new BankAccount("", 100));
+
+        //Equivalence Classes for Check Balance:
+        //Check Whole numbers
+        BankAccount bankAccount1 = new BankAccount("a@b.com", 10);
+        assertEquals(10, bankAccount1.getBalance());
+        BankAccount bankAccount2 = new BankAccount("a@b.com", 0);
+        assertEquals(0, bankAccount2.getBalance());
+
+        //Check Balances with Decimals
+        BankAccount bankAccount3 = new BankAccount("a@b.com", 10.88);
+        assertEquals(10.88, bankAccount3.getBalance());
+        BankAccount bankAccount32 = new BankAccount("a@b.com", 10.00);
+        assertEquals(10, bankAccount32.getBalance());
+
+        assertThrows(IllegalArgumentException.class, ()-> new BankAccount("", 0.879));
+        assertThrows(IllegalArgumentException.class, ()-> new BankAccount("", -1));
+
+
+
     }
 
 }

@@ -51,6 +51,19 @@ public class BankAccount {
         }
     }
 
+    /**
+     * @post removes balance from account
+     */
+    public void withdrawOscar (double amount) throws InsufficientFundsException{
+        if (amount < 0){
+            throw new IllegalArgumentException("Amount must be positive");
+        }
+        if (amount > balance){ 
+            throw new InsufficientFundsException("Amount should be equal to or less than balance");
+        }
+        balance -= amount; 
+    }
+
 
     public static boolean isEmailValid(String email){
         if (email.indexOf('@') == -1){

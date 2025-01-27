@@ -48,6 +48,36 @@ class BankAccountTest {
     }
 
     @Test
+    void isEmailValidTest2(){
+        //made some more tests, all 16 tested from website of conditions
+        assertTrue(BankAccount.isEmailValid( "a@b.com"));   // valid email address
+        assertFalse( BankAccount.isEmailValid(""));         // empty string
+
+        //prefix tests
+        assertTrue(BankAccount.isEmailValid( "abc.def@mail.com"));
+        assertTrue(BankAccount.isEmailValid( "abc-d@mail.com")); 
+        assertTrue(BankAccount.isEmailValid( "abc_def@mail.com")); 
+        assertTrue(BankAccount.isEmailValid( "abc@mail.com")); 
+
+        assertFalse(BankAccount.isEmailValid( "abc..def@mail.com")); 
+        assertFalse(BankAccount.isEmailValid( ".abc@mail.com"));
+        assertFalse(BankAccount.isEmailValid( "abc-@mail.com"));
+        assertFalse(BankAccount.isEmailValid( "abc#def@mail.com"));
+
+        // domain tests
+        assertTrue(BankAccount.isEmailValid( "abc.def@mail.cc")); 
+        assertTrue(BankAccount.isEmailValid( "abc.def@mail-archive.cc")); 
+        assertTrue(BankAccount.isEmailValid( "abc.def@mail.org")); 
+        assertTrue(BankAccount.isEmailValid( "abc.def@mail.com")); 
+
+
+        assertFalse(BankAccount.isEmailValid( "abc.def@mail.c")); 
+        assertFalse(BankAccount.isEmailValid( "abc.def@mail"));
+        assertFalse(BankAccount.isEmailValid( "abc.def@mail#archive.com")); 
+        assertFalse(BankAccount.isEmailValid( "abc.def@mail#archive..com")); 
+
+    }
+    @Test
     void constructorTest() {
         BankAccount bankAccount = new BankAccount("a@b.com", 200);
 

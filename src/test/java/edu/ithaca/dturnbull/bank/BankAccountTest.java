@@ -4,6 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.io.InvalidClassException;
+
 import org.junit.jupiter.api.Test;
 
 
@@ -11,18 +14,48 @@ class BankAccountTest {
 
     @Test
     void getBalanceTest() {
+        //Valid Bank Acount, Positive Class
         BankAccount bankAccount = new BankAccount("a@b.com", 200);
 
         assertEquals(200, bankAccount.getBalance(), 0.001);
+
+        //Valid Bank Acount 0 balance Class
+        BankAccount bankAccount2 = new BankAccount("a3@b.com", 0);
+
+        assertEquals(0, bankAccount2.getBalance(), 0.001);
+
+        //Valid negative balance Class:
+        BankAccount bankAccount22 = new BankAccount("a6@b.com", -5);
+
+        assertEquals(-5, bankAccount22.getBalance(), 0.001);
+
+
     }
 
     @Test
     void withdrawTest() throws InsufficientFundsException{
+        // Valid Inputs and enough money
         BankAccount bankAccount = new BankAccount("a@b.com", 200);
         bankAccount.withdraw(100);
 
         assertEquals(100, bankAccount.getBalance(), 0.001);
+
+        // Insufficient Funds Class
         assertThrows(InsufficientFundsException.class, () -> bankAccount.withdraw(300));
+
+        //  Edge Cases Equivalence Class
+        bankAccount.withdraw(0);
+        assertEquals(100, bankAccount.getBalance(), 0.001);
+
+        bankAccount.withdraw(100);
+        assertEquals(0, bankAccount.getBalance(), 0.001);
+
+        // Illegal Input Class
+        BankAccount bankAccount2 = new BankAccount("a2@b.com", 200);
+        assertThrows(IllegalArgumentException.class, () -> bankAccount2.withdraw(-10));
+
+        
+
     }
 
     @Test
@@ -48,33 +81,40 @@ class BankAccountTest {
     }
 
     @Test
-    void isEmailValidTest2(){
-        //made some more tests, all 16 tested from website of conditions
+    void isEmailValidTestfixed(){
+        //made some more tests
         assertTrue(BankAccount.isEmailValid( "a@b.com"));   // valid email address
         assertFalse( BankAccount.isEmailValid(""));         // empty string
 
-        //prefix tests
+        //prefix tests(equivalence class)
         assertTrue(BankAccount.isEmailValid( "abc.def@mail.com"));
         assertTrue(BankAccount.isEmailValid( "abc-d@mail.com")); 
         assertTrue(BankAccount.isEmailValid( "abc_def@mail.com")); 
-        assertTrue(BankAccount.isEmailValid( "abc@mail.com")); 
+        assertTrue(BankAccount.isEmailValid( "abc05@mail.com")); 
 
-        assertFalse(BankAccount.isEmailValid( "abc..def@mail.com")); 
+        assertFalse(BankAccount.isEmailValid( "ab3c..def@mail.com")); 
         assertFalse(BankAccount.isEmailValid( ".abc@mail.com"));
         assertFalse(BankAccount.isEmailValid( "abc-@mail.com"));
-        assertFalse(BankAccount.isEmailValid( "abc#def@mail.com"));
+        assertFalse(BankAccount.isEmailValid( "ab2c#def@mail.com"));
 
-        // domain tests
-        assertTrue(BankAccount.isEmailValid( "abc.def@mail.cc")); 
+        // domain tests(equivalence class)
         assertTrue(BankAccount.isEmailValid( "abc.def@mail-archive.cc")); 
         assertTrue(BankAccount.isEmailValid( "abc.def@mail.org")); 
-        assertTrue(BankAccount.isEmailValid( "abc.def@mail.com")); 
+        assertTrue(BankAccount.isEmailValid( "a2bc.def@mail.com")); 
 
+
+        assertFalse(BankAccount.isEmailValid( "abc.def@mail"));
+        assertFalse(BankAccount.isEmailValid( "abc.def@mail#archive.com")); 
+        assertFalse(BankAccount.isEmailValid( "abc.def@ma..il.com")); 
+
+        assertFalse(BankAccount.isEmailValid( "abc.def@mail#archive..com")); 
+
+        //TDL tests(equivalence class)
+        assertTrue(BankAccount.isEmailValid( "abc.def@mail.cc")); 
 
         assertFalse(BankAccount.isEmailValid( "abc.def@mail.c")); 
         assertFalse(BankAccount.isEmailValid( "abc.def@mail"));
-        assertFalse(BankAccount.isEmailValid( "abc.def@mail#archive.com")); 
-        assertFalse(BankAccount.isEmailValid( "abc.def@mail#archive..com")); 
+
 
     }
     @Test

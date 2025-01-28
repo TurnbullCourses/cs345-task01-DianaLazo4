@@ -31,6 +31,29 @@ public class BankAccount {
         return email;
     }
 
+    public void deposit(double amount){
+        if (amount < 0){
+            throw new IllegalArgumentException("Not valid input");
+        }
+        if (false == isAmountValid(amount)){
+            throw new IllegalArgumentException("Not valid input");
+        }
+        double balancee = balance + amount;
+        balance = balancee;
+    }
+
+    public void transfer(BankAccount targetAccount, double amount) throws InsufficientFundsException {
+        if (false == isAmountValid(amount)){
+            throw new IllegalArgumentException("Not valid input");
+        }
+        if (amount > balance) {
+            throw new InsufficientFundsException("Insufficient funds for the transfer.");
+        }
+        double balancee  = balance - amount;
+        balance = balancee;       
+        targetAccount.deposit(amount); 
+    }
+    
     /**
      * @post reduces the balance by amount if amount is non-negative and smaller than balance
      */
@@ -112,4 +135,5 @@ public class BankAccount {
     
         return true;
     }
+
 }

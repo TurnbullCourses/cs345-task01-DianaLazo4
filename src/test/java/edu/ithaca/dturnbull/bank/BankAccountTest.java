@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.InvalidClassException;
 
+import javax.swing.event.InternalFrameListener;
+
 import org.junit.jupiter.api.Test;
 
 
@@ -166,4 +168,66 @@ class BankAccountTest {
 
     }
 
+    @Test
+    void transfertest() throws InsufficientFundsException{
+        //Class: Transfer into bank acount whole number
+        BankAccount bankAccount = new BankAccount("a@b.com", 100);
+        BankAccount transfertoacc = new BankAccount("a56@bot.com", 0);
+        bankAccount.transfer(transfertoacc, 10);
+        assertEquals(bankAccount.getBalance(), 90);
+        assertEquals(transfertoacc.getBalance(), 10);
+
+        assertThrows(InsufficientFundsException.class, ()-> bankAccount.transfer(transfertoacc, 100));
+        assertThrows(IllegalArgumentException.class, ()-> bankAccount.transfer(transfertoacc, -10));
+
+        transfertoacc.transfer(bankAccount, 10);
+        assertEquals(bankAccount.getBalance(), 100);
+        assertEquals(transfertoacc.getBalance(), 0);
+
+        //Transfer nothing into it
+        bankAccount.transfer(transfertoacc, 0);
+        assertEquals(transfertoacc.getBalance(), 0);
+        //Transfer with decimals
+        bankAccount.transfer(transfertoacc, 10.55);
+        assertEquals(bankAccount.getBalance(), 89.45);
+        assertEquals(transfertoacc.getBalance(), 10.55);
+
+        assertThrows(InsufficientFundsException.class, ()-> bankAccount.transfer(transfertoacc, 100.89));
+        assertThrows(IllegalArgumentException.class, ()-> bankAccount.transfer(transfertoacc, 10.989));
+        assertThrows(IllegalArgumentException.class, ()-> bankAccount.transfer(transfertoacc, -10.989));
+
+
+        transfertoacc.transfer(bankAccount, 10.55);
+        assertEquals(bankAccount.getBalance(), 100);
+        assertEquals(transfertoacc.getBalance(), 0);
+
+
+    }
+
+    @Test
+    void deposittest(){
+        //Deposit Full Integer Amounts
+        BankAccount bankAccount = new BankAccount("a@b.com", 100);
+        bankAccount.deposit(10);
+        assertEquals(bankAccount.getBalance(), 110);
+        assertThrows(IllegalArgumentException.class, ()-> bankAccount.deposit(-100));
+
+
+        BankAccount bankAccount2 = new BankAccount("a@b.com", 0);
+        bankAccount2.deposit(10);
+        assertEquals(bankAccount2.getBalance(), 10);
+
+        //Deposit Decimals
+
+        bankAccount.deposit(10.55);
+        assertEquals(bankAccount.getBalance(), 120.55);
+        assertThrows(IllegalArgumentException.class, ()-> bankAccount.deposit(100.876));
+
+
+
+
+
+
+        
+    }
 }

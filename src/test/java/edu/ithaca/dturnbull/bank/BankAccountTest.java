@@ -120,6 +120,9 @@ class BankAccountTest {
         assertFalse(BankAccount.isEmailValid( "abc.def@mail.c")); 
         assertFalse(BankAccount.isEmailValid( "abc.def@mail"));
 
+        //may have a bit too much tests
+        // symbols don't need to test all
+
 
     }
     @Test
@@ -136,6 +139,7 @@ class BankAccountTest {
         assertFalse(BankAccount.isAmountValid( 0.687));
         assertTrue(BankAccount.isAmountValid( 0.68));
         assertFalse(BankAccount.isAmountValid( -0.68));
+        // some may be unnesseesary
 
 
     }

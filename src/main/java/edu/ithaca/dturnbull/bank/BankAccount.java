@@ -32,9 +32,7 @@ public class BankAccount {
     }
 
     public void deposit(double amount){
-        if (amount < 0){
-            throw new IllegalArgumentException("Not valid input");
-        }
+        
         if (false == isAmountValid(amount)){
             throw new IllegalArgumentException("Not valid input");
         }
@@ -49,19 +47,16 @@ public class BankAccount {
         if (amount > balance) {
             throw new InsufficientFundsException("Insufficient funds for the transfer.");
         }
-        double balancee  = balance - amount;
-        balance = balancee;       
-        targetAccount.deposit(amount); 
+        withdraw(amount);    
+        targetAccount.deposit(amount);
+        
     }
     
     /**
      * @post reduces the balance by amount if amount is non-negative and smaller than balance
      */
     public void withdraw (double amount) throws InsufficientFundsException{
-        //added this if statement, ammount withdrawn must be positive
-        if (amount < 0){
-            throw new IllegalArgumentException("Not valid input");
-        }
+        
         if (false == isAmountValid(amount)){
             throw new IllegalArgumentException("Not valid input");
         }
